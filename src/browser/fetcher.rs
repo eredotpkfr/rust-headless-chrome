@@ -23,9 +23,9 @@ pub const CUR_REV: &str = "1095492";
 const APP_NAME: &str = "headless-chrome";
 const DEFAULT_HOST: &str = "https://storage.googleapis.com";
 
-#[cfg(target_os = "linux", target_arch = "aarch64")]
+#[cfg(all(target_os = "linux", target_arch = "aarch64"))]
 const PLATFORM: &str = "linux_arm";
-#[cfg(target_os = "linux", not(target_arch = "aarch64"))]
+#[cfg(all(target_os = "linux", not(target_arch = "aarch64")))]
 const PLATFORM: &str = "linux";
 #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
 const PLATFORM: &str = "mac_arm";
@@ -426,7 +426,7 @@ fn archive_name<R: AsRef<str>>(revision: R) -> &'static str {
 fn latest_revision() -> Result<String> {
     let mut url = format!("{DEFAULT_HOST}/chromium-browser-snapshots");
 
-    #[cfg(target_os = "linux", not(target_arch = "aarch64"))]
+    #[cfg(all(target_os = "linux", not(target_arch = "aarch64")))]
     {
         url = format!("{url}/Linux_x64/LAST_CHANGE");
         ureq::get(&url)
@@ -435,7 +435,7 @@ fn latest_revision() -> Result<String> {
             .map_err(anyhow::Error::from)
     }
 
-    #[cfg(target_os = "linux", target_arch = "aarch64")]
+    #[cfg(all(target_os = "linux", target_arch = "aarch64"))]
     {
         url = format!("{url}/Linux_ARM_Cross-Compile/LAST_CHANGE");
         ureq::get(&url)
